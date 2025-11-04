@@ -1,37 +1,69 @@
 import React from "react";
-import companyVideo from "./assets/videos/companyvideoo.mp4";
+import { motion } from "framer-motion";
+import companyVideo from "./assets/videos/company2video.mp4";
 
 const VideoSection = () => {
   return (
-    <section className="relative w-full h-96 sm:96 md:h-[calc(100vh-80px)] overflow-hidden flex items-center justify-center top-20">
-      {/* Background Video */}
+    <section
+      id="home"
+      className="relative w-full h-[85vh] sm:h-[90vh] md:h-[calc(100vh-80px)] flex items-center justify-center overflow-hidden"
+    >
+      {/* ✅ Background Video */}
       <video
         src={companyVideo}
         autoPlay
         loop
         muted
         playsInline
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover brightness-[0.8]"
       />
 
-      {/* Dark overlay for better contrast */}
-      {/* <div className="absolute inset-0 bg-black bg-opacity-40"></div> */}
+      {/* ✅ Softer Overlay (for readability) */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.6),rgba(0,0,0,0.3),transparent)]"></div>
 
-      {/* Content */}
-      <div className="relative z-10 text-center text-white px-6 sm:px-10">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 drop-shadow-lg font-barlow tracking-wider">
+      {/* ✅ Main Content */}
+      <div className="relative z-10 text-center text-white px-6 sm:px-8 md:px-16 max-w-5xl mx-auto">
+        {/* Title */}
+        <motion.h1
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.5)]"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: 'easeOut' }}
+        >
           Building a Safer Future
-        </h1>
-        <p className="text-base sm:text-lg md:text-xl lg:text-2xl max-w-3xl mx-auto mb-3 drop-shadow-md font-roboto font-semibold tracking-wide">
-          Civil Construction • Fire & Safety • Fabrication & Pre-Engineering
-        </p>
-        <p className="font-semibold text-lg sm:text-xl md:text-3xl lg:text-4xl 
-  text-yellow-300 tracking-wide animate-pulse drop-shadow-[0_0_8px_rgba(250,204,21,0.8)] 
-  transition-all duration-700">
-  With Nexgen Brothers Construction
-</p>
+        </motion.h1>
 
+        {/* Subheadline Divider */}
+        <motion.div
+          className="w-24 h-0.5 bg-yellow-500 mx-auto mb-5 rounded-full"
+          initial={{ width: 0 }}
+          whileInView={{ width: '6rem' }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+        />
+
+        {/* Services Line */}
+        <motion.p
+          className="text-base sm:text-lg md:text-xl lg:text-2xl font-light mb-5 text-gray-200 tracking-wide leading-relaxed"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.4, ease: 'easeOut' }}
+        >
+          Civil Construction • Fire & Safety • Fabrication & Pre-Engineering
+        </motion.p>
+
+        {/* Company Name */}
+        <motion.p
+          className="font-semibold text-lg sm:text-xl md:text-2xl lg:text-3xl text-yellow-400 tracking-wider"
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, delay: 0.6, ease: 'easeOut' }}
+        >
+          With Nexgen Brothers Construction
+        </motion.p>
       </div>
+
+      {/* ✅ Bottom Fade (gentle transition) */}
+      <div className="absolute bottom-0 w-full h-40 bg-[linear-gradient(to_top,rgba(0,0,0,0.7),transparent)]"></div>
     </section>
   );
 };

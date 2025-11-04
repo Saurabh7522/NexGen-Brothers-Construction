@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronDown } from "lucide-react";
 import logoImage from "./assets/images/logo.jpg";
@@ -6,152 +7,215 @@ import logoImage from "./assets/images/logo.jpg";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const location = useLocation();
 
-  const toggleMenu = () => setIsOpen(!isOpen);
-  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
+  // Check if we’re on a services page for active highlight
+  const isServiceActive = location.pathname.startsWith("/services");
+  const isProjectsActive =
+    location.pathname.startsWith("/projects") ||
+    location.pathname.startsWith("/navprojects");
 
   const navLinks = [
-    { name: "Home", href: "#home" },
-    { name: "About", href: "#about" },
-    { name: "Projects", href: "#projects" },
-    { name: "Contact", href: "#contact" },
+    { name: "Home", to: "/" },
+    { name: "About", to: "/about" },
+    { name: "Projects", to: "/projects" },
+    { name: "Contact", to: "/contact" },
   ];
 
   return (
-    <nav className="fixed w-full top-0 left-0 bg-white/80 backdrop-blur-lg shadow-sm z-50">
-      <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+    <nav className="fixed w-full top-0 left-0 bg-white backdrop-blur-md shadow z-50">
+      <div className="max-w-7xl mx-auto px-6 py-1 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center space-x-3">
-          <img
-            src={logoImage}
-            alt="Company Logo"
-            className="h-10 w-10 rounded-full object-cover"
-          />
-          <span className="text-xl font-semibold text-amber-700 tracking-wide">
-            Nexgen Brothers
-          </span>
+          <NavLink to="/">
+            <img src={logoImage} alt="NexGen" className=" md:h-auto w-32" />
+          </NavLink>
         </div>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center space-x-8 font-medium text-gray-700">
-          {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              className="hover:text-amber-700 transition"
-            >
-              {link.name}
-            </a>
-          ))}
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center space-x-8">
+          {navLinks.map((link) => {
+            // custom active logic for Projects
+            const isActive =
+              (link.to === "/projects" && isProjectsActive) ||
+              location.pathname === link.to;
+
+            return (
+              <NavLink
+                key={link.name}
+                to={link.to}
+                className={`relative group py-2 transition-all duration-300 ease-out transform ${
+                  isActive
+                    ? "text-red-600 font-semibold"
+                    : "text-gray-700 hover:text-gray-900"
+                }`}
+              >
+                <motion.span
+                  whileHover={{
+                    y: -2,
+                    transition: { duration: 0.2 },
+                  }}
+                >
+                  {link.name}
+                </motion.span>
+                <span
+                  className={`absolute left-0 -bottom-1 h-0.5 rounded-full transition-all duration-500 ease-in-out ${
+                    isActive
+                      ? "w-full bg-red-600"
+                      : "w-0 bg-red-500 group-hover:w-full"
+                  }`}
+                />
+              </NavLink>
+            );
+          })}
 
           {/* Services Dropdown */}
           <div
-            className="relative"
-            onMouseEnter={toggleDropdown}
-            onMouseLeave={toggleDropdown}
+            className="relative group"
+            onMouseEnter={() => setIsDropdownOpen(true)}
+            onMouseLeave={() => setIsDropdownOpen(false)}
           >
-            <button className="flex items-center space-x-1 hover:text-amber-700 transition">
-              <span>Services</span>
-              <ChevronDown className="w-4 h-4 mt-[2px]" />
+            <button
+              className={`relative flex items-center space-x-1 py-2 transition-all duration-300 ${
+                isServiceActive
+                  ? "text-red-600 font-semibold"
+                  : "text-gray-700 hover:text-gray-900"
+              }`}
+            >
+              <motion.span
+                whileHover={{
+                  y: -2,
+                  transition: { duration: 0.2 },
+                }}
+              >
+                Services
+              </motion.span>
+              <ChevronDown className="w-4 h-4 mt-px" />
+              <span
+                className={`absolute left-0 -bottom-1 h-0.5 rounded-full transition-all duration-500 ease-in-out ${
+                  isServiceActive
+                    ? "w-full bg-red-600"
+                    : "w-0 bg-red-500 group-hover:w-full"
+                }`}
+              />
             </button>
 
             <AnimatePresence>
               {isDropdownOpen && (
                 <motion.ul
-                  initial={{ opacity: 0, y: -10, scaleY: 0.8 }}
-                  animate={{ opacity: 1, y: 0, scaleY: 1 }}
-                  exit={{ opacity: 0, y: -10, scaleY: 0.8 }}
-                  transition={{ duration: 0.25, ease: "easeInOut" }}
-                  className="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100 origin-top overflow-hidden"
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-100 overflow-hidden"
                 >
-                  {[
-                    "Civil Construction",
-                    "Fire Safety",
-                    "Fabrication",
-                    "Maintenance",
-                  ].map((service, index) => (
-                    <motion.li
-                      key={index}
-                      whileHover={{ backgroundColor: "#fef3c7" }}
-                      className="px-4 py-2 text-sm text-gray-700 hover:text-amber-700 cursor-pointer"
-                    >
-                      {service}
-                    </motion.li>
-                  ))}
+                  <NavLink
+                    to="/services/civil"
+                    className="block px-4 py-2 text-sm hover:bg-red-50 transition"
+                  >
+                    Civil Construction
+                  </NavLink>
+                  <NavLink
+                    to="/services/fire"
+                    className="block px-4 py-2 text-sm hover:bg-red-50 transition"
+                  >
+                    Fire Safety
+                  </NavLink>
+                  <NavLink
+                    to="/services/fabrication"
+                    className="block px-4 py-2 text-sm hover:bg-red-50 transition"
+                  >
+                    Fabrication
+                  </NavLink>
+                  <NavLink
+                    to="/services/maintenance"
+                    className="block px-4 py-2 text-sm hover:bg-red-50 transition"
+                  >
+                    Maintenance
+                  </NavLink>
                 </motion.ul>
               )}
             </AnimatePresence>
           </div>
         </div>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile button */}
         <button
-          className="md:hidden p-2 rounded-md hover:bg-gray-100 transition"
-          onClick={toggleMenu}
+          className="md:hidden p-2 rounded-md"
+          onClick={() => setIsOpen((s) => !s)}
         >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
+          {isOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden bg-white/95 backdrop-blur-lg shadow-lg border-t border-gray-100"
+            exit={{ opacity: 0, y: -10 }}
+            className="md:hidden bg-white border-t border-gray-100 shadow-lg"
           >
-            <div className="px-6 py-4 flex items-center space-x-3 border-b border-gray-100">
-              <img
-                src={logoImage}
-                alt="Company Logo"
-                className="h-8 w-8 rounded-full object-cover"
-              />
-              <span className="text-lg font-semibold text-amber-700">
-                Nexgen Brothers
-              </span>
-            </div>
+            <div className="px-6 py-4">
+              {navLinks.map((link) => {
+                const isActive =
+                  (link.to === "/projects" && isProjectsActive) ||
+                  location.pathname === link.to;
 
-            <ul className="flex flex-col px-6 py-4 space-y-3 text-gray-700 font-medium">
-              {navLinks.map((link) => (
-                <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="block py-2 hover:text-amber-700 transition"
+                return (
+                  <NavLink
+                    key={link.name}
+                    to={link.to}
                     onClick={() => setIsOpen(false)}
+                    className={`block relative group py-2 transition-all duration-300 ${
+                      isActive
+                        ? "text-red-600 font-semibold"
+                        : "text-gray-700 hover:text-gray-900 "
+                    }`}
                   >
                     {link.name}
-                  </a>
-                </li>
-              ))}
+                   
+                  </NavLink>
+                );
+              })}
 
-              {/* Services Dropdown in Mobile */}
-              <li>
-                <details className="group">
-                  <summary className="flex items-center justify-between cursor-pointer py-2 hover:text-amber-700 transition">
-                    Services
-                    <ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180" />
-                  </summary>
-                  <ul className="pl-4 mt-2 space-y-2">
-                    {[
-                      "Civil Construction",
-                      "Fire Safety",
-                      "Fabrication",
-                      "Maintenance",
-                    ].map((service, index) => (
-                      <li
-                        key={index}
-                        className="text-sm text-gray-700 hover:text-amber-700 cursor-pointer transition"
-                      >
-                        {service}
-                      </li>
-                    ))}
-                  </ul>
-                </details>
-              </li>
-            </ul>
+              <details className="mt-3">
+                <summary className="py-2 cursor-pointer flex items-center justify-between text-gray-700 hover:text-gray-900">
+                  Services <ChevronDown className="w-4 h-4" />
+                </summary>
+                <div className="pl-4 mt-2 space-y-1">
+                  <NavLink
+                    to="/services/civil"
+                    onClick={() => setIsOpen(false)}
+                    className="block py-1 hover:text-red-600"
+                  >
+                    Civil Construction
+                  </NavLink>
+                  <NavLink
+                    to="/services/fire"
+                    onClick={() => setIsOpen(false)}
+                    className="block py-1 hover:text-red-600"
+                  >
+                    Fire Safety
+                  </NavLink>
+                  <NavLink
+                    to="/services/fabrication"
+                    onClick={() => setIsOpen(false)}
+                    className="block py-1 hover:text-red-600"
+                  >
+                    Fabrication
+                  </NavLink>
+                  <NavLink
+                    to="/services/maintenance"
+                    onClick={() => setIsOpen(false)}
+                    className="block py-1 hover:text-red-600"
+                  >
+                    Maintenance
+                  </NavLink>
+                </div>
+              </details>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

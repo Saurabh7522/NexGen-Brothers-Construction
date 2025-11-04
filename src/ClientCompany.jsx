@@ -6,7 +6,7 @@ import companyimg1 from "./assets/images/companyimg1.webp";
 import companyimg4 from "./assets/images/companyimg4.webp";
 import companyimg5 from "./assets/images/companyimg5.webp";
 import companyimg6 from "./assets/images/companyimg6.webp";
-import clientVideo from "./assets/videos/companyvideoo.mp4";
+import clientVideo from "./assets/videos/company2Video.mp4";
 
 export default function ClientCompany() {
   const companies = [
@@ -78,7 +78,7 @@ export default function ClientCompany() {
               muted
               autoPlay
               loop
-              className="relative w-full h-auto rounded-2xl shadow-lg object-cover border border-gray-200"
+              className="relative w-full h-auto rounded-2xl shadow-lg object-fill border border-gray-200"
             />
           </div>
         </motion.div>

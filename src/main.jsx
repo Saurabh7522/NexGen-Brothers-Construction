@@ -1,32 +1,13 @@
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import App from "./App";
+import "./index.css";
 
-import { createRoot } from 'react-dom/client'
-import './index.css'
-// import App from './App.jsx'
-import Navbar from './navbar.jsx'
-import Hero from './hero.jsx'
-import VideoSection from './VideoSection.jsx'
-import ServicesCards, { services } from './Services.jsx'
-import Projects from './Projects.jsx'
-import Footer from './Footer.jsx'
-import ClientCompany from './ClientCompany.jsx'
-
-
-
-
-
-
-createRoot(document.getElementById('root')).render(
-  <>
-    <Navbar />
-    <VideoSection />
-    <Hero />
-    <buildingSection />
-    <ServicesCards services={services} />
-    <Projects />
-    <ClientCompany />
-    <Footer />
-    </>
-)
-
-
-
+createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
+);
