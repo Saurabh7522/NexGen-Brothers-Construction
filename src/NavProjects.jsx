@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // ✅ Import images from assets/images
 import civil1 from "./assets/images/civilConstruction1.png";  
@@ -118,11 +118,55 @@ function NavProjects() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [showForm, setShowForm] = useState(false); // ✅ For Testimonial Popup
   const categories = ["All", "Civil Construction", "Fire & Safety", "Fabrication"];
+  const navigate = useNavigate();
+
+  const handleNavigateToContact = () => {
+  navigate("/contact");
+}
+  const [testimonials, setTestimonials] = useState([
+    {
+      name: "Rajesh Patel",
+      role: "Factory Owner – Pune",
+      feedback:
+        "NexGen completed our industrial shed fabrication ahead of schedule. The precision and professionalism were outstanding!",
+      avatar: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+    },
+    {
+      name: "Neha Sharma",
+      role: "Architect – Mumbai",
+      feedback:
+        "The fire detection and alarm system installation was flawless. Their team followed every safety protocol perfectly.",
+      avatar: "https://cdn-icons-png.flaticon.com/512/2922/2922561.png",
+    },
+    {
+      name: "Vikas Deshmukh",
+      role: "Builder – Nagpur",
+      feedback:
+        "Excellent project coordination and reliable execution. I’ll continue to partner with them for future civil projects.",
+      avatar: "https://cdn-icons-png.flaticon.com/512/146/146035.png",
+    },
+  ]);
+
+  const [newTestimonial, setNewTestimonial] = useState({
+    name: "",
+    role: "",
+    feedback: "",
+    avatar: "https://cdn-icons-png.flaticon.com/512/149/149071.png", // default avatar
+  });
 
   const filteredProjects =
     selectedCategory === "All"
       ? projectsData
       : projectsData.filter((p) => p.category === selectedCategory);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!newTestimonial.name || !newTestimonial.feedback) return;
+
+    setTestimonials([newTestimonial, ...testimonials]);
+    setNewTestimonial({ name: "", role: "", feedback: "", avatar: newTestimonial.avatar });
+    setShowForm(false);
+  };
 
   return (
     <section className="min-h-screen bg-linear-to-b from-gray-50 via-white to-gray-100 py-16 px-6 md:px-12">
@@ -266,44 +310,16 @@ function NavProjects() {
         </p>
 
         <div className="grid gap-10 md:grid-cols-3">
-          {[
-            {
-              name: "Rajesh Patel",
-              role: "Factory Owner – Pune",
-              feedback:
-                "NexGen completed our industrial shed fabrication ahead of schedule. The precision and professionalism were outstanding!",
-              avatar: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
-            },
-            {
-              name: "Neha Sharma",
-              role: "Architect – Mumbai",
-              feedback:
-                "The fire detection and alarm system installation was flawless. Their team followed every safety protocol perfectly.",
-              avatar: "https://cdn-icons-png.flaticon.com/512/2922/2922561.png",
-            },
-            {
-              name: "Vikas Deshmukh",
-              role: "Builder – Nagpur",
-              feedback:
-                "Excellent project coordination and reliable execution. I’ll continue to partner with them for future civil projects.",
-              avatar: "https://cdn-icons-png.flaticon.com/512/146/146035.png",
-            },
-          ].map((client, index) => (
+          {testimonials.map((client, index) => (
             <motion.div
               key={index}
               whileHover={{ y: -5, scale: 1.02 }}
               className="bg-white border border-gray-100 shadow-md hover:shadow-2xl transition-all duration-300 rounded-2xl p-8 flex flex-col items-center text-center"
             >
               <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-blue-100 mb-4">
-                <img
-                  src={client.avatar}
-                  alt={client.name}
-                  className="w-full h-full object-cover"
-                />
+                <img src={client.avatar} alt={client.name} className="w-full h-full object-cover" />
               </div>
-              <p className="text-gray-600 italic leading-relaxed mb-5">
-                “{client.feedback}”
-              </p>
+              <p className="text-gray-600 italic leading-relaxed mb-5">“{client.feedback}”</p>
               <h4 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
                 <span className="text-blue-600 text-xl">★</span> {client.name}
               </h4>
@@ -318,52 +334,15 @@ function NavProjects() {
             Want to share your experience with NexGen Brothers?
           </p>
           <button
-            onClick={() => setShowForm(true)}
-            className="px-6 py-3 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl"
+            onClick={handleNavigateToContact}
+            className="px-6 py-3 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl cursor-pointer"
           >
             Add Your Testimonial
           </button>
         </div>
 
         {/* Testimonial Modal */}
-        {showForm && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-2xl shadow-2xl w-11/12 max-w-lg p-8 relative">
-              <button
-                onClick={() => setShowForm(false)}
-                className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
-              >
-                ✕
-              </button>
-              <h3 className="text-2xl font-semibold text-blue-600 mb-6">
-                Share Your Testimonial
-              </h3>
-              <form className="space-y-4 text-left">
-                <input
-                  type="text"
-                  placeholder="Your Name"
-                  className="w-full border rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-blue-400"
-                />
-                <input
-                  type="text"
-                  placeholder="Your Role / Company"
-                  className="w-full border rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-blue-400"
-                />
-                <textarea
-                  placeholder="Write your feedback..."
-                  rows="4"
-                  className="w-full border rounded-lg px-4 py-2 outline-none focus:ring-2 focus:ring-blue-400"
-                ></textarea>
-                <button
-                  type="submit"
-                  className="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition"
-                >
-                  Submit Testimonial
-                </button>
-              </form>
-            </div>
-          </div>
-        )}
+        
       </motion.div>
 
       {/* CTA Section */}

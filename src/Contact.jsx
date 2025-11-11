@@ -11,19 +11,21 @@ export default function Contact() {
     setIsSending(true);
     setStatus("");
 
+    // Make sure template ID is added once available
     emailjs
       .sendForm(
-        "your_service_id", // replace with your EmailJS service ID
-        "your_template_id", // replace with your template ID
+        "service_t2b41uq", // ✅ Your EmailJS Service ID
+        "template_iaq387f", // ⚠️ Replace this once you create a template
         form.current,
-        "your_public_key" // replace with your public key
+        "m3SWkxJdRachNenKi" // ✅ Your Public Key
       )
       .then(
         () => {
           setStatus("✅ Message sent successfully!");
           form.current.reset();
         },
-        () => {
+        (error) => {
+          console.error("Email send failed:", error);
           setStatus("❌ Failed to send message. Please try again later.");
         }
       )
@@ -87,7 +89,7 @@ export default function Contact() {
             <div className="text-5xl mb-4 group-hover:scale-110 transition-transform">📍</div>
             <h4 className="text-xl font-semibold text-red-400 mb-2">Office</h4>
             <p className="text-gray-300 group-hover:text-white transition-colors">
-              Vadodra, Gujrat , India
+              Vadodra, Gujarat, India
             </p>
             <p className="text-sm text-gray-500 mt-1">View on Google Maps</p>
           </a>

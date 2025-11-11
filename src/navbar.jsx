@@ -28,7 +28,13 @@ const Navbar = () => {
         {/* Logo */}
         <div className="flex items-center space-x-3">
           <NavLink to="/">
-            <img src={logoImage} alt="NexGen" className=" md:h-auto w-32" />
+            <img
+  src={logoImage}
+  alt="NexGen"
+  className="h-18 w-auto object-contain"
+  loading="eager"
+  fetchPriority="high" // ✅ Correct
+/>
           </NavLink>
         </div>
 
@@ -168,10 +174,10 @@ const Navbar = () => {
                     key={link.name}
                     to={link.to}
                     onClick={() => setIsOpen(false)}
-                    className={`block relative group py-2 transition-all duration-300 ${
+                    className={`block relative group py-2 transition-all duration-300 hover:bg-gray-50 ${
                       isActive
-                        ? "text-red-600 font-semibold"
-                        : "text-gray-700 hover:text-gray-900 "
+                        ? "text-red-600 font-semibold "
+                        : "text-gray-700 hover:text-gray-900 s "
                     }`}
                   >
                     {link.name}
@@ -211,6 +217,7 @@ const Navbar = () => {
                     onClick={() => setIsOpen(false)}
                     className="block py-1 hover:text-red-600"
                   >
+                    
                     Maintenance
                   </NavLink>
                 </div>

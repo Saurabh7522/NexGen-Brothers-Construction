@@ -2,17 +2,16 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import heroImage from "./assets/images/WORK image.png";
+import "./Hero.css"; // <-- we'll add styles below
 
 const Hero = () => {
   const navigate = useNavigate();
 
   const handleNavigateToProjects = () => {
-    // Navigate to the /projects route
     navigate("/projects");
-
-    // Optional: smooth scroll to top
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
 
   const handleNavigateToContact = () => {
     navigate("/contact");
@@ -20,91 +19,105 @@ const Hero = () => {
   };
 
   return (
-    <section
-      className="relative pt-20 pb-16 sm:px-6 lg:px-8 max-w-7xl mx-auto mt-10 overflow-hidden scroll-mt-20"
-      id="hero"
-    >
-      {/* Background Gradient */}
-      <div className="absolute inset-0  from-indigo-50 via-white to-gray-50 -z-10" />
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+    <section id="hero" className="hero-section overflow-hidden">
+      <motion.div
+        className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-24 grid grid-cols-1 md:grid-cols-2 gap-12 items-center"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+      >
         {/* Left Section */}
         <motion.div
-          className="m-6 md:m-12"
-          initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          initial={{ opacity: 0, x: -60 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1 }}
         >
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight tracking-wide uppercase">
-            Trusted Construction, Fire Safety & Fabrication Solutions
-          </h1>
+          <motion.h1
+            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight stylish-heading"
+            whileHover={{ scale: 1.03 }}
+          >
+            Transforming Ideas Into
+            <br />
+            <span className="highlight"> Timeless Structures</span>
+          </motion.h1>
 
-          <p className="mt-5 text-lg text-gray-600 leading-relaxed font-nunito max-w-xl">
-            We deliver end-to-end services across Civil Construction, Fire Safety Systems,
-            and Precision Fabrication — ensuring top-tier quality, safety, and timely
-            delivery for every project.
-          </p>
+          <motion.p
+            className="mt-6 text-lg text-gray-700 font-roboto leading-relaxed max-w-xl"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.3 }}
+          >
+            At <strong>Nexgen Brothers</strong>, we craft excellence across Civil Construction,
+            Fire Safety, and Fabrication — driven by precision, integrity, and innovation.
+          </motion.p>
 
           <motion.div
-            className="mt-8 flex flex-col sm:flex-row gap-4"
+            className="mt-10 flex flex-col sm:flex-row gap-5"
             initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.5 }}
           >
             <button
               onClick={handleNavigateToProjects}
-              className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-indigo-600 text-white font-semibold shadow-lg cursor-pointer hover:bg-indigo-700 hover:shadow-xl transition-all duration-300"
+              className="btn-primary cursor-pointer"
             >
-              Our Projects
+              🚀 View Projects
             </button>
             <button
               onClick={handleNavigateToContact}
-              className="inline-flex items-center justify-center px-6 py-3 rounded-lg border border-indigo-200 text-indigo-700 font-semibold hover:bg-indigo-50 transition-all duration-300 cursor-pointer"
+              className="btn-secondary cursor-pointer"
             >
-              Request Quote
+              📩 Request Quote
             </button>
           </motion.div>
 
+          {/* Floating Stats */}
           <motion.div
-            className="mt-8 grid grid-cols-2 gap-6 text-gray-700"
+            className="mt-12 flex gap-8 text-center"
             initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.5 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.2, delay: 0.8 }}
           >
-            <div className="p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition duration-300">
-              <strong className="block text-indigo-700 text-3xl font-bold">10+</strong>
-              <span className="text-gray-600 font-medium">Years Experience</span>
-            </div>
-            <div className="p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition duration-300">
-              <strong className="block text-indigo-700 text-3xl font-bold">200+</strong>
-              <span className="text-gray-600 font-medium">Projects Delivered</span>
-            </div>
+            <motion.div
+              animate={{ y: [0, -10, 0] }}
+              transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+              className="stat-card"
+            >
+              <h3 className="stat-number">10+</h3>
+              <p className="stat-text">Years Experience</p>
+            </motion.div>
+            <motion.div
+              animate={{ y: [0, 10, 0] }}
+              transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
+              className="stat-card"
+            >
+              <h3 className="stat-number">200+</h3>
+              <p className="stat-text">Projects Delivered</p>
+            </motion.div>
           </motion.div>
         </motion.div>
 
         {/* Right Section */}
         <motion.div
-          className="order-first md:order-last flex justify-center"
           initial={{ opacity: 0, x: 60 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.9, ease: "easeOut" }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1.2 }}
+          className="relative flex justify-center"
         >
-          <div className="relative w-full max-w-md sm:max-w-lg">
-            <motion.img
+          <motion.div
+            animate={{ y: [0, -15, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            className="relative"
+          >
+            <img
               src={heroImage}
               alt="Construction Work"
-              className="rounded-2xl shadow-xl w-full"
-              animate={{ y: [0, -10, 0] }}
-              transition={{
-                duration: 6,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
+              className="rounded-3xl shadow-2xl w-full max-w-lg object-cover hero-image"
             />
-            <div className="absolute inset-0  from-indigo-200/20 via-transparent to-transparent rounded-2xl blur-2xl -z-10" />
-          </div>
+            <div className="absolute -inset-4 rounded-3xl bg-linear-to-tr from-indigo-400/20 via-transparent to-blue-400/20 blur-3xl" />
+          </motion.div>
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 };

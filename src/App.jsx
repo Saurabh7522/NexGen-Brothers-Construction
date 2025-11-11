@@ -1,25 +1,31 @@
-import React, { useEffect } from "react";
-import { Routes, Route, useLocation, Navigate } from "react-router-dom";
+import React, { Suspense, lazy, useEffect } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 
 import Navbar from "./navbar";
 import Footer from "./Footer";
-import Home from "./Home";
-import About from "./About";
-import NavProjects from "./NavProjects"; 
-import Projects from "./Projects";
-import Contact from "./Contact";
-import ServicesList from "./ServicesPage";
-import ServiceDetail from "./ServiceDetail";
-import NotFound from "./NotFound";
 import ScrollToTop from "./ScrollToTop";
 
-function App() {
-  const location = useLocation();
+// Lazy load pages
+const Home = lazy(() => import("./Home"));
+const About = lazy(() => import("./About"));
+const NavProjects = lazy(() => import("./NavProjects"));
+const Projects = lazy(() => import("./Projects"));
+const Contact = lazy(() => import("./Contact"));
+const ServicesList = lazy(() => import("./ServicesPage"));
+const ServiceDetail = lazy(() => import("./ServiceDetail"));
+const NotFound = lazy(() => import("./NotFound"));
+const TermsPolicy = lazy(() => import("./TermsPolicy"));
 
-  // ✅ Redirect to home if page is reloaded (optional — you may remove this if not needed)
+function App() {
+  const navigate = useNavigate();
+
   useEffect(() => {
-    if (window.performance && window.performance.navigation.type === 1) {
-      window.location.replace("/"); // redirect to home
+    const navEntries = performance.getEntriesByType("navigation");
+    const isReload = navEntries[0]?.type === "reload";
+
+    // ✅ Only redirect to home on full page reload **if not already on home**
+    if (isReload && window.location.pathname !== "/") {
+      window.location.href = "/"; // Hard reload to Home
     }
   }, []);
 
@@ -29,30 +35,34 @@ function App() {
       <ScrollToTop />
 
       <main className="flex-1 mt-20">
-        <Routes>
-          {/* Main Pages */}
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
+        <Suspense fallback={<div className="text-center py-20">Loading...</div>}>
+          <Routes>
+            {/* Main Pages */}
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/terms" element={<TermsPolicy />} />
 
-          {/* Projects Section */}
-          <Route path="/projects" element={<NavProjects />} />
-          <Route path="/projects/overview" element={<Projects />} />
+            {/* Projects Section */}
+            <Route path="/projects" element={<NavProjects />} />
+            <Route path="/projects/overview" element={<Projects />} />
 
-          {/* Contact */}
-          <Route path="/contact" element={<Contact />} />
+            {/* Contact */}
+            <Route path="/contact" element={<Contact />} />
 
-          {/* Services */}
-          <Route path="/services" element={<ServicesList />} />
-          <Route path="/services/:serviceId" element={<ServiceDetail />} />
+            {/* Services */}
+            <Route path="/services" element={<ServicesList />} />
+            <Route path="/services/:serviceId" element={<ServiceDetail />} />
 
-          {/* 404 Fallback */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+            {/* 404 Fallback */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </main>
 
       <Footer />
     </div>
   );
 }
+
 
 export default App;
